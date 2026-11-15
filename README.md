@@ -1,1 +1,38 @@
-# Robustness-Research\n\nNoise robustness of compression methods, with per-method tolerance thresholds.\n\n## What it does\n\nSweeps Gaussian noise levels (scaled by matrix std) against three\ncompression methods, reports reconstruction error against the clean\noriginal per (method, noise), and computes noise_tolerance: the largest\nswept noise level whose error stays under a threshold.\n\n    from robustness_research import noise_sweep, noise_tolerance\n\n    rows = noise_sweep(W, noise_levels=(0.0, 0.05, 0.1, 0.2))\n    print(noise_tolerance(rows, "svd_rank4", max_error=0.1))\n\n## API\n\n- add_noise(matrix, noise, seed) - std-scaled Gaussian noise\n- noise_sweep(matrix, noise_levels, seed) - error per method per level\n- noise_tolerance(rows, method, max_error) - largest safe swept level\n\n## Honest results and limitations\n\n- Expected result: quantization error stays roughly flat as noise grows\n  (noise passes through); SVD absorbs some noise but distorts the signal.\n  Neither wins in general.\n- Tolerance is limited to the swept grid; the true crossing point between\n  two levels is not interpolated.\n- Gaussian noise only; adversarial or structured corruption is out of scope.\n\n## Status\n\nPart of the kapildhinwa2010-dev toolkit experiments. CI and CodeQL run on\nevery push to main. License: MIT.\n
+# Robustness-Research
+
+[![CI](https://github.com/kapildhinwa2010-dev/Robustness-Research/actions/workflows/ci.yml/badge.svg)](https://github.com/kapildhinwa2010-dev/Robustness-Research/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/kapildhinwa2010-dev/Robustness-Research/actions/workflows/codeql.yml/badge.svg)](https://github.com/kapildhinwa2010-dev/Robustness-Research/actions/workflows/codeql.yml)
+
+Noise robustness of compression methods, with per-method tolerance thresholds.
+
+## What it does
+
+Sweeps Gaussian noise levels (scaled by matrix std) against three
+compression methods, reports reconstruction error against the clean
+original per (method, noise), and computes noise_tolerance: the largest
+swept noise level whose error stays under a threshold.
+
+    from robustness_research import noise_sweep, noise_tolerance
+
+    rows = noise_sweep(W, noise_levels=(0.0, 0.05, 0.1, 0.2))
+    print(noise_tolerance(rows, "svd_rank4", max_error=0.1))
+
+## API
+
+- add_noise(matrix, noise, seed) - std-scaled Gaussian noise
+- noise_sweep(matrix, noise_levels, seed) - error per method per level
+- noise_tolerance(rows, method, max_error) - largest safe swept level
+
+## Honest results and limitations
+
+- Expected result: quantization error stays roughly flat as noise grows
+  (noise passes through); SVD absorbs some noise but distorts the signal.
+  Neither wins in general.
+- Tolerance is limited to the swept grid; the true crossing point between
+  two levels is not interpolated.
+- Gaussian noise only; adversarial or structured corruption is out of scope.
+
+## Status
+
+Part of the kapildhinwa2010-dev toolkit experiments. CI and CodeQL run on
+every push to main. License: MIT.
